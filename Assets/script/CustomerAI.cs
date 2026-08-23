@@ -1,33 +1,58 @@
 ﻿using UnityEngine;
+using UnityEngine.AI;
 
 public class CustomerAI : MonoBehaviour
 {
     private Animator animator;
+    public NavMeshAgent agent;
+    public Transform orderPoint;
+
+    private bool hasOrdered = false;
 
     void Start()
     {
-        // Lấy component Animator gắn trên nhân vật
         animator = GetComponent<Animator>();
 
-        // Vừa xuất hiện -> Cho đi bộ vào quầy
-        StartWalking();
+        if (agent == null)
+            agent = GetComponent<NavMeshAgent>();
+
+        if (orderPoint != null && agent != null)
+        {
+            agent.SetDestination(orderPoint.position);
+            StartWalking();
+        }
     }
 
-    // Gọi hàm này khi khách bắt đầu đi bộ
+    void Update()
+    {
+        if (agent != null && !agent.pathPending && !hasOrdered)
+        {
+            // Kiểm tra nếu khoảng cách còn lại nhỏ hơn hoặc bằng stoppingDistance (hoặc khoảng nhỏ 0.8)
+            if (agent.remainingDistance <= agent.stoppingDistance + 0.3f)
+            {
+                // Dừng di chuyển và phát Animation gọi món
+                StopAndWait();
+                OrderFood();
+                hasOrdered = true; // Đánh dấu đã nhận lệnh gọi món
+            }
+        }
+    }
+
     public void StartWalking()
     {
-        animator.SetBool("IsWalking", true);
+        if (animator != null) animator.SetBool("IsWalking", true);
     }
 
-    // Gọi hàm này khi khách đã đi tới quầy xếp hàng (dừng lại)
     public void StopAndWait()
     {
-        animator.SetBool("IsWalking", false);
+        if (animator != null) animator.SetBool("IsWalking", false);
     }
 
-    // Gọi hàm này khi đến lượt khách gọi món
     public void OrderFood()
     {
-        animator.SetTrigger("IsOrdering");
+        if (animator != null)
+        {
+            animator.SetTrigger("IsOrdering");
+        }
     }
 }
