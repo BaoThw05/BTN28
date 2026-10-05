@@ -1,0 +1,2 @@
+flows: []
+notes: "No session, static, ThreadLocal, cookie, request, or other implicit cross-unit state was found in the project-authored gameplay scripts."

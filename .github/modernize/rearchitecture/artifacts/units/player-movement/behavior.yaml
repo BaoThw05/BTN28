@@ -1,0 +1,21 @@
+unit: player-movement
+side_effects:
+  - source_loc: Assets/script/PlayerMovement.cs:35
+    effect: "Moves the CharacterController using Horizontal and Vertical input."
+    must_preserve: true
+  - source_loc: Assets/script/PlayerMovement.cs:47
+    effect: "Applies vertical velocity and moves the CharacterController."
+    must_preserve: true
+branches:
+  - source_loc: Assets/script/PlayerMovement.cs:27
+    condition: "Grounded and falling velocity is negative."
+    behavior: "Resets vertical velocity to -2 before movement."
+    must_preserve: true
+  - source_loc: Assets/script/PlayerMovement.cs:41
+    condition: "Jump button is pressed while grounded."
+    behavior: "Sets jump velocity from jumpHeight and gravity."
+    must_preserve: true
+error_paths: []
+concurrency:
+  model: sync
+  tx_boundary: null

@@ -1,0 +1,2 @@
+contracts: []
+notes: "No external REST, messaging, file, or service contracts were found in the inspected project gameplay scope. Scene transitions and serialized Unity references are recorded in bindings and behavior artifacts."

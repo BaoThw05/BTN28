@@ -5331,11 +5331,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 512444055734054304, guid: af6f9335513c9854bbe988b8bea58c40, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.81
+      value: 0.44
       objectReference: {fileID: 0}
     - target: {fileID: 512444055734054304, guid: af6f9335513c9854bbe988b8bea58c40, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -4.1
+      value: -4.24
       objectReference: {fileID: 0}
     - target: {fileID: 512444055734054304, guid: af6f9335513c9854bbe988b8bea58c40, type: 3}
       propertyPath: m_LocalRotation.w
@@ -5802,7 +5802,7 @@ MonoBehaviour:
   groundDistance: 0.4
   groundMask:
     serializedVersion: 2
-    m_Bits: 128
+    m_Bits: 64
 --- !u!114 &1892039782
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5840,7 +5840,7 @@ CharacterController:
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0.06, y: 1.44, z: -3.98}
+  m_Center: {x: -0.03, y: 1.41, z: -4.2}
 --- !u!1001 &1895265287
 PrefabInstance:
   m_ObjectHideFlags: 0

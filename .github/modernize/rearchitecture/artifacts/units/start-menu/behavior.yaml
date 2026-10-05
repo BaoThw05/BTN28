@@ -1,0 +1,15 @@
+unit: start-menu
+side_effects:
+  - source_loc: Assets/script/MainMenu.cs:12
+    effect: "Loads the Kitchen Unity scene when PlayGame is invoked."
+    must_preserve: true
+branches: []
+error_paths:
+  - source_loc: Assets/script/MainMenu.cs:12
+    trigger: "Kitchen scene is not present in the build settings."
+    outcome: "Scene loading fails at runtime instead of entering gameplay."
+    contract: "Unity scene load must succeed in a built player."
+    must_preserve: true
+concurrency:
+  model: sync
+  tx_boundary: null
