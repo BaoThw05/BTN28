@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     public CharacterController controller;
+    public Transform cameraTransform;
 
     public float speed = 12f;
     public float gravity = -9.81f * 2;
@@ -40,8 +41,20 @@ public class PlayerMovement : MonoBehaviour
         float x = Input.GetAxis("Horizontal");
         float z = Input.GetAxis("Vertical");
 
-        //right is the red Axis, foward is the blue axis
-        Vector3 move = transform.right * x + transform.forward * z;
+        if (cameraTransform == null && Camera.main != null)
+        {
+            cameraTransform = Camera.main.transform;
+        }
+
+        Transform movementReference = cameraTransform != null ? cameraTransform : transform;
+        Vector3 cameraForward = movementReference.forward;
+        Vector3 cameraRight = movementReference.right;
+        cameraForward.y = 0f;
+        cameraRight.y = 0f;
+        cameraForward.Normalize();
+        cameraRight.Normalize();
+
+        Vector3 move = cameraRight * x + cameraForward * z;
 
         controller.Move(move * speed * Time.deltaTime);
 

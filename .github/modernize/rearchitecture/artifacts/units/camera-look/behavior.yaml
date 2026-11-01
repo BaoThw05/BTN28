@@ -1,0 +1,17 @@
+unit: camera-look
+side_effects:
+  - source_loc: Assets/script/MouseMovement.cs:12
+    effect: "Locks the cursor when the component starts."
+    must_preserve: true
+  - source_loc: Assets/script/MouseMovement.cs:29
+    effect: "Applies local camera rotation from mouse input."
+    must_preserve: true
+branches:
+  - source_loc: Assets/script/MouseMovement.cs:25
+    condition: "Mouse pitch is outside the allowed range."
+    behavior: "Clamps pitch to -90 through 90 degrees."
+    must_preserve: true
+error_paths: []
+concurrency:
+  model: sync
+  tx_boundary: null

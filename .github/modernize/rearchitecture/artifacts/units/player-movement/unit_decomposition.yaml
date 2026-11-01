@@ -1,0 +1,7 @@
+unit: player-movement
+commit: false
+candidate_splits:
+  - id: Assets/script/PlayerMovement.cs:22-48
+    drivers: [concern_split]
+    rationale: "Input sampling, grounded-state calculation, horizontal movement, and vertical jump/gravity are separate responsibilities that may require independent tuning."
+    source_slice: {file: Assets/script/PlayerMovement.cs, lines: [22, 48]}

@@ -1,0 +1,33 @@
+unit: customer-order-ai
+bindings:
+  - type: convention
+    name: "MonoBehaviour.Start"
+    source_loc: Assets/script/CustomerAI.cs:12
+    target: "CustomerAI"
+    must_appear_in_target: true
+    notes: "Initializes Animator/Agent references and destination."
+  - type: convention
+    name: "MonoBehaviour.Update"
+    source_loc: Assets/script/CustomerAI.cs:26
+    target: "CustomerAI"
+    must_appear_in_target: true
+    notes: "Polls NavMeshAgent arrival state."
+runtime_config:
+  - key: "orderPoint"
+    source_loc: Assets/Scenes/Kitchen.unity:1246
+    source: code
+    default_value: "serialized Transform reference"
+    must_appear_in_target: true
+    notes: "Destination used for customer navigation."
+  - key: "NavMeshAgent.stoppingDistance"
+    source_loc: Assets/script/CustomerAI.cs:28
+    source: annotation
+    default_value: "serialized component value"
+    must_appear_in_target: true
+    notes: "Arrival threshold is stoppingDistance plus 0.3."
+  - key: "CustomerAI.interactionDistance"
+    source_loc: Assets/script/CustomerAI.cs:13
+    source: annotation
+    default_value: "3"
+    must_appear_in_target: true
+    notes: "Maximum distance at which the player can accept the order with E."

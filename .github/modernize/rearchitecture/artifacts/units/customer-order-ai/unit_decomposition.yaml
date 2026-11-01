@@ -1,0 +1,7 @@
+unit: customer-order-ai
+commit: false
+candidate_splits:
+  - id: Assets/script/CustomerAI.cs:12-39
+    drivers: [concern_split, lifecycle_split]
+    rationale: "Navigation setup, arrival detection, and animation/order state are separate lifecycle concerns and may evolve independently as food-order interactions are added."
+    source_slice: {file: Assets/script/CustomerAI.cs, lines: [12, 39]}

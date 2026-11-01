@@ -1,0 +1,33 @@
+unit: customer-order-ai
+side_effects:
+  - source_loc: Assets/script/CustomerAI.cs:20
+    effect: "Sets the NavMeshAgent destination to orderPoint and starts the walking animation."
+    must_preserve: true
+  - source_loc: Assets/script/CustomerAI.cs:34
+    effect: "Stops walking, triggers ordering animation, and marks the customer as ordered."
+    must_preserve: true
+  - source_loc: Assets/script/CustomerAI.cs:110
+    effect: "Displays the requested food and hides it after the player accepts the order."
+    must_preserve: true
+branches:
+  - source_loc: Assets/script/CustomerAI.cs:17
+    condition: "orderPoint and agent are both assigned."
+    behavior: "Starts navigation; otherwise no destination is set."
+    must_preserve: true
+  - source_loc: Assets/script/CustomerAI.cs:28
+    condition: "Agent has a completed path and is within stopping distance plus 0.3."
+    behavior: "Transitions from walking to waiting/ordering once."
+    must_preserve: true
+  - source_loc: Assets/script/CustomerAI.cs:58
+    condition: "Player is within interactionDistance and presses E while the order is waiting."
+    behavior: "Accepts the order and changes the order display to Order accepted."
+    must_preserve: true
+error_paths:
+  - source_loc: Assets/script/CustomerAI.cs:17
+    trigger: "Agent or orderPoint is null."
+    outcome: "Customer remains without navigation; no exception is intentionally raised by this script."
+    contract: "Scene must provide both references for ordering behavior."
+    must_preserve: true
+concurrency:
+  model: sync
+  tx_boundary: null
