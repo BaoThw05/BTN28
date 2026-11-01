@@ -920,7 +920,7 @@ public class PlayerOrderInteraction : MonoBehaviour
             Bounds burgerBounds = GetBounds(visual.transform);
             float burgerFootprint = Mathf.Max(burgerBounds.size.x, burgerBounds.size.z);
             float lidFootprint = Mathf.Min(tableBounds.size.x, tableBounds.size.z);
-            float targetFootprint = lidFootprint * 0.68f;
+            float targetFootprint = lidFootprint * 0.82f;
             if (burgerFootprint > 0.001f && targetFootprint > 0f)
             {
                 float fitScale = Mathf.Clamp(targetFootprint / burgerFootprint, 0.8f, 5f);

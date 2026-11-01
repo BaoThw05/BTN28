@@ -416,7 +416,7 @@ public class CustomerAI : MonoBehaviour
         panelRect.anchorMax = new Vector2(0.5f, 0.5f);
         panelRect.pivot = new Vector2(0.5f, 0.5f);
         panelRect.anchoredPosition = Vector2.zero;
-        panelRect.sizeDelta = new Vector2(500f, 410f);
+        panelRect.sizeDelta = new Vector2(760f, 560f);
 
         Image panelImage = ingredientsPanel.GetComponent<Image>();
         Transform orderFrame = orderCanvasObject.transform.Find("FramePanel");
@@ -426,11 +426,11 @@ public class CustomerAI : MonoBehaviour
         panelImage.color = Color.white;
         panelImage.raycastTarget = false;
 
-        CreatePanelLabel("NGUY\u00CAN LI\u1EC6U C\u1EA6N", new Vector2(0f, 168f),
-            new Vector2(440f, 42f), 28f, FontStyles.Bold);
+        CreatePanelLabel("NGUY\u00CAN LI\u1EC6U C\u1EA6N", new Vector2(0f, 230f),
+            new Vector2(600f, 54f), 38f, FontStyles.Bold);
         CreateIngredientGrid();
-        CreatePanelLabel("Nh\u1EA5n X \u0111\u1EC3 \u0111\u00F3ng", new Vector2(0f, -183f),
-            new Vector2(440f, 32f), 20f, FontStyles.Normal);
+        CreatePanelLabel("Nh\u1EA5n X \u0111\u1EC3 \u0111\u00F3ng", new Vector2(0f, -250f),
+            new Vector2(600f, 36f), 26f, FontStyles.Normal);
 
         ingredientsPopupCanvas.SetActive(false);
     }
@@ -444,7 +444,7 @@ public class CustomerAI : MonoBehaviour
             playerInteraction = FindObjectOfType<PlayerOrderInteraction>();
 
         const int previewLayer = 31;
-        RenderTexture previewTexture = new RenderTexture(128, 128, 16, RenderTextureFormat.ARGB32);
+        RenderTexture previewTexture = new RenderTexture(192, 192, 16, RenderTextureFormat.ARGB32);
         previewTexture.Create();
 
         GameObject cameraObject = new GameObject("IngredientPreviewCamera");
@@ -473,8 +473,8 @@ public class CustomerAI : MonoBehaviour
         {
             int column = i % 3;
             int row = i / 3;
-            float x = (column - 1) * 145f;
-            float iconY = 100f - row * 100f;
+            float x = (column - 1) * 220f;
+            float iconY = 130f - row * 145f;
             GameObject prefab = playerInteraction != null
                 ? playerInteraction.GetIngredientDisplayPrefab(requiredIngredients[i])
                 : null;
@@ -487,15 +487,15 @@ public class CustomerAI : MonoBehaviour
             RectTransform iconRect = iconObject.GetComponent<RectTransform>();
             iconRect.anchorMin = new Vector2(0.5f, 0.5f);
             iconRect.anchorMax = new Vector2(0.5f, 0.5f);
-            iconRect.anchoredPosition = new Vector2(x - 35f, iconY);
-            iconRect.sizeDelta = new Vector2(84f, 84f);
+            iconRect.anchoredPosition = new Vector2(x - 45f, iconY);
+            iconRect.sizeDelta = new Vector2(126f, 126f);
             Image iconImage = iconObject.GetComponent<Image>();
             iconImage.sprite = icon;
             iconImage.preserveAspect = true;
             iconImage.raycastTarget = false;
 
-            CreatePanelLabel("x1", new Vector2(x + 48f, iconY),
-                new Vector2(44f, 30f), 22f, FontStyles.Bold);
+            CreatePanelLabel("x1", new Vector2(x + 82f, iconY),
+                new Vector2(68f, 42f), 30f, FontStyles.Bold);
         }
 
         Destroy(cameraObject);
