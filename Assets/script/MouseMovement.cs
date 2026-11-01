@@ -14,6 +14,18 @@ public class MouseMovement : MonoBehaviour
     {
         //Locking the cursor to the middle of the screen and making it invisible
         Cursor.lockState = CursorLockMode.Locked;
+
+        // The camera is attached to the player model. Hide that model so it does
+        // not fill the view or clip into the camera in first-person mode.
+        Transform playerVisual = transform.parent;
+        if (playerVisual != null)
+        {
+            Renderer[] playerRenderers = playerVisual.GetComponentsInChildren<Renderer>(true);
+            foreach (Renderer playerRenderer in playerRenderers)
+            {
+                playerRenderer.enabled = false;
+            }
+        }
     }
 
     void Update()

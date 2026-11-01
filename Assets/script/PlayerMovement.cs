@@ -14,15 +14,23 @@ public class PlayerMovement : MonoBehaviour
     public float groundDistance = 0.4f;
     public LayerMask groundMask;
 
-    Vector3 velocity;
+    private Vector3 velocity;
+    private readonly Collider[] groundHits = new Collider[8];
 
-    bool isGrounded;
+    private void Awake()
+    {
+        if (controller == null)
+            controller = GetComponent<CharacterController>();
+    }
 
     // Update is called once per frame
     void Update()
     {
-        //checking if we hit the ground to reset our falling velocity, otherwise we will fall faster the next time
-        isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
+        if (controller == null) return;
+
+        // CharacterController.isGrounded detects TerrainCollider directly and does not
+        // depend on the scene's groundMask layer being configured correctly.
+        bool isGrounded = controller.isGrounded || CheckGroundBelow();
 
         if (isGrounded && velocity.y < 0)
         {
@@ -47,5 +55,29 @@ public class PlayerMovement : MonoBehaviour
         velocity.y += gravity * Time.deltaTime;
 
         controller.Move(velocity * Time.deltaTime);
+    }
+
+    private bool CheckGroundBelow()
+    {
+        Bounds bounds = controller.bounds;
+        float radius = Mathf.Max(0.12f, controller.radius * 0.5f);
+        Vector3 probeCenter = new Vector3(bounds.center.x, bounds.min.y + radius * 0.5f, bounds.center.z);
+
+        // Dùng mọi layer để nhận Terrain ở cả Town lẫn Kitchen; bỏ qua collider của player.
+        int hitCount = Physics.OverlapSphereNonAlloc(
+            probeCenter,
+            radius,
+            groundHits,
+            Physics.AllLayers,
+            QueryTriggerInteraction.Ignore);
+
+        for (int i = 0; i < hitCount; i++)
+        {
+            Collider hit = groundHits[i];
+            if (hit != null && hit != controller && !hit.transform.IsChildOf(transform))
+                return true;
+        }
+
+        return false;
     }
 }
