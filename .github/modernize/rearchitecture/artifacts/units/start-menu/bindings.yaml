@@ -1,0 +1,9 @@
+unit: start-menu
+bindings:
+  - type: route-declaration
+    name: "MainMenu.PlayGame"
+    source_loc: Assets/Scenes/Start.unity:575
+    target: "Play button UnityEvent"
+    must_appear_in_target: true
+    notes: "The serialized UnityEvent invokes MainMenu.PlayGame."
+runtime_config: []

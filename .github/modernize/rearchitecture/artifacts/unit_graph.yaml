@@ -1,0 +1,71 @@
+units:
+  - name: start-menu
+    trigger: page
+    trigger_detail: "Unity scene Assets/Scenes/Start.unity; Play button invokes MainMenu.PlayGame"
+    source_anchors:
+      - path: Assets/script/MainMenu.cs
+        line: 3
+    exported_signature:
+      - method: "void MainMenu.PlayGame()"
+        source_loc: Assets/script/MainMenu.cs:10
+        stability: frozen
+    dynamic_entrypoints:
+      - target: "MainMenu.PlayGame"
+        mechanism: convention
+        source_loc: Assets/Scenes/Start.unity:575
+    depends_on: []
+    shared_refs: []
+
+  - name: player-movement
+    trigger: page
+    trigger_detail: "Unity gameplay scene Assets/Scenes/Kitchen.unity; per-frame player input"
+    source_anchors:
+      - path: Assets/script/PlayerMovement.cs
+        line: 5
+    exported_signature: []
+    dynamic_entrypoints:
+      - target: "PlayerMovement.Update"
+        mechanism: convention
+        source_loc: Assets/script/PlayerMovement.cs:22
+    depends_on: []
+    shared_refs: []
+
+  - name: camera-look
+    trigger: page
+    trigger_detail: "Unity gameplay scene Assets/Scenes/Kitchen.unity; per-frame mouse input"
+    source_anchors:
+      - path: Assets/script/MouseMovement.cs
+        line: 5
+    exported_signature: []
+    dynamic_entrypoints:
+      - target: "MouseMovement.Update"
+        mechanism: convention
+        source_loc: Assets/script/MouseMovement.cs:19
+    depends_on: []
+    shared_refs: []
+
+  - name: customer-order-ai
+    trigger: page
+    trigger_detail: "Unity gameplay scene Assets/Scenes/Kitchen.unity; NavMeshAgent customer behavior"
+    source_anchors:
+      - path: Assets/script/CustomerAI.cs
+        line: 4
+    exported_signature:
+      - method: "void CustomerAI.StartWalking()"
+        source_loc: Assets/script/CustomerAI.cs:41
+        stability: must_preserve
+      - method: "void CustomerAI.StopAndWait()"
+        source_loc: Assets/script/CustomerAI.cs:46
+        stability: must_preserve
+      - method: "void CustomerAI.OrderFood()"
+        source_loc: Assets/script/CustomerAI.cs:51
+        stability: must_preserve
+    dynamic_entrypoints:
+      - target: "CustomerAI.Start"
+        mechanism: convention
+        source_loc: Assets/script/CustomerAI.cs:12
+      - target: "CustomerAI.Update"
+        mechanism: convention
+        source_loc: Assets/script/CustomerAI.cs:26
+    depends_on: []
+    shared_refs: []

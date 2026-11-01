@@ -1,0 +1,27 @@
+unit: player-movement
+bindings:
+  - type: convention
+    name: "MonoBehaviour.Update"
+    source_loc: Assets/script/PlayerMovement.cs:22
+    target: "PlayerMovement"
+    must_appear_in_target: true
+    notes: "Unity invokes Update once per frame."
+runtime_config:
+  - key: "Horizontal"
+    source_loc: Assets/script/PlayerMovement.cs:32
+    source: properties-file
+    default_value: "ProjectSettings/InputManager.asset"
+    must_appear_in_target: true
+    notes: "Legacy horizontal movement axis."
+  - key: "Vertical"
+    source_loc: Assets/script/PlayerMovement.cs:33
+    source: properties-file
+    default_value: "ProjectSettings/InputManager.asset"
+    must_appear_in_target: true
+    notes: "Legacy forward/back movement axis."
+  - key: "Jump"
+    source_loc: Assets/script/PlayerMovement.cs:41
+    source: properties-file
+    default_value: "ProjectSettings/InputManager.asset"
+    must_appear_in_target: true
+    notes: "Legacy jump button."

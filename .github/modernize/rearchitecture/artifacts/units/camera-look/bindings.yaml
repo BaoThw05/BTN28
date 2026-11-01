@@ -1,0 +1,21 @@
+unit: camera-look
+bindings:
+  - type: convention
+    name: "MonoBehaviour.Update"
+    source_loc: Assets/script/MouseMovement.cs:19
+    target: "MouseMovement"
+    must_appear_in_target: true
+    notes: "Unity invokes Update once per frame."
+runtime_config:
+  - key: "Mouse X"
+    source_loc: Assets/script/MouseMovement.cs:21
+    source: properties-file
+    default_value: "ProjectSettings/InputManager.asset"
+    must_appear_in_target: true
+    notes: "Legacy horizontal mouse axis."
+  - key: "Mouse Y"
+    source_loc: Assets/script/MouseMovement.cs:22
+    source: properties-file
+    default_value: "ProjectSettings/InputManager.asset"
+    must_appear_in_target: true
+    notes: "Legacy vertical mouse axis."
