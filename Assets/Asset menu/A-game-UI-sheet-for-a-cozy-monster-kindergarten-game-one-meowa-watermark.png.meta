@@ -1,0 +1,385 @@
+fileFormatVersion: 2
+guid: a6d381cb9db421449b75557a4380ea2f
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 0
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 1
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: A-game-UI-sheet-for-a-cozy-monster-kindergarten-game-one-meowa-watermark_0
+      rect:
+        serializedVersion: 2
+        x: 70
+        y: 1628
+        width: 2916
+        height: 435
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 58481b008ee209944a60d2c8fa964635
+      internalID: 1942319058
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: A-game-UI-sheet-for-a-cozy-monster-kindergarten-game-one-meowa-watermark_1
+      rect:
+        serializedVersion: 2
+        x: 131
+        y: 253
+        width: 1730
+        height: 1267
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 55d02c79ee2f5524482e3a3a9180edf9
+      internalID: -2124030382
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: A-game-UI-sheet-for-a-cozy-monster-kindergarten-game-one-meowa-watermark_2
+      rect:
+        serializedVersion: 2
+        x: 1976
+        y: 1010
+        width: 935
+        height: 513
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4cf5cc5b061d2e74a89d69fe7ae42a40
+      internalID: 560355345
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: A-game-UI-sheet-for-a-cozy-monster-kindergarten-game-one-meowa-watermark_3
+      rect:
+        serializedVersion: 2
+        x: 2000
+        y: 614
+        width: 930
+        height: 281
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 349414da98d293642b502469efc4e33e
+      internalID: -389104342
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: A-game-UI-sheet-for-a-cozy-monster-kindergarten-game-one-meowa-watermark_4
+      rect:
+        serializedVersion: 2
+        x: 2000
+        y: 262
+        width: 931
+        height: 292
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0c404f83485601740867176d722acfd1
+      internalID: 1944938307
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: A-game-UI-sheet-for-a-cozy-monster-kindergarten-game-one-meowa-watermark_5
+      rect:
+        serializedVersion: 2
+        x: 2203
+        y: 56
+        width: 147
+        height: 147
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1240842152b53ed4d8eed59d697caf6c
+      internalID: -316201289
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: A-game-UI-sheet-for-a-cozy-monster-kindergarten-game-one-meowa-watermark_6
+      rect:
+        serializedVersion: 2
+        x: 2437
+        y: 56
+        width: 129
+        height: 147
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a5df69fd0eb2dd64bbc91e855347952f
+      internalID: -34609656
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: A-game-UI-sheet-for-a-cozy-monster-kindergarten-game-one-meowa-watermark_7
+      rect:
+        serializedVersion: 2
+        x: 2581
+        y: 56
+        width: 93
+        height: 111
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a88bfb955bf2ba448bf1714288a96f10
+      internalID: 1259726815
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: A-game-UI-sheet-for-a-cozy-monster-kindergarten-game-one-meowa-watermark_8
+      rect:
+        serializedVersion: 2
+        x: 2689
+        y: 56
+        width: 93
+        height: 111
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cb85ec21f1fdebe4da521714bda001f6
+      internalID: -1255186615
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: A-game-UI-sheet-for-a-cozy-monster-kindergarten-game-one-meowa-watermark_9
+      rect:
+        serializedVersion: 2
+        x: 2797
+        y: 56
+        width: 129
+        height: 111
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d86f09b2aa0b27441a0f1dbd944e205c
+      internalID: -132779769
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: A-game-UI-sheet-for-a-cozy-monster-kindergarten-game-one-meowa-watermark_10
+      rect:
+        serializedVersion: 2
+        x: 2941
+        y: 56
+        width: 75
+        height: 111
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a87467ea4f99af64695fe3cb2d24b304
+      internalID: -1215654630
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 802f131bef1e9ad419819f053b922f24
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":0,"keepEmptyRects":false,"isAlternate":false}'
+    nameFileIdTable:
+      A-game-UI-sheet-for-a-cozy-monster-kindergarten-game-one-meowa-watermark_0: 1942319058
+      A-game-UI-sheet-for-a-cozy-monster-kindergarten-game-one-meowa-watermark_1: -2124030382
+      A-game-UI-sheet-for-a-cozy-monster-kindergarten-game-one-meowa-watermark_10: -1215654630
+      A-game-UI-sheet-for-a-cozy-monster-kindergarten-game-one-meowa-watermark_2: 560355345
+      A-game-UI-sheet-for-a-cozy-monster-kindergarten-game-one-meowa-watermark_3: -389104342
+      A-game-UI-sheet-for-a-cozy-monster-kindergarten-game-one-meowa-watermark_4: 1944938307
+      A-game-UI-sheet-for-a-cozy-monster-kindergarten-game-one-meowa-watermark_5: -316201289
+      A-game-UI-sheet-for-a-cozy-monster-kindergarten-game-one-meowa-watermark_6: -34609656
+      A-game-UI-sheet-for-a-cozy-monster-kindergarten-game-one-meowa-watermark_7: 1259726815
+      A-game-UI-sheet-for-a-cozy-monster-kindergarten-game-one-meowa-watermark_8: -1255186615
+      A-game-UI-sheet-for-a-cozy-monster-kindergarten-game-one-meowa-watermark_9: -132779769
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
