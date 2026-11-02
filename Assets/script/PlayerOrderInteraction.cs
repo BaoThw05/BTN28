@@ -54,7 +54,7 @@ public class PlayerOrderInteraction : MonoBehaviour
     private Transform preparationModelRoot;
     private CustomerAI activeOrder;
     private bool lastDeliveredFoodContainsBurntMeat;
-    private int money;
+    private PlayerEconomy economy;
     private bool meatOnPan;
     private bool meatCooked;
     private bool meatBurnt;
@@ -68,7 +68,7 @@ public class PlayerOrderInteraction : MonoBehaviour
 
     public bool HasFood => !string.IsNullOrEmpty(carriedFood);
     public bool IsFoodReady => HasFood;
-    public int Money => money;
+    public int Money => economy != null ? economy.Money : startingMoney;
     public bool LastDeliveredFoodContainsBurntMeat => lastDeliveredFoodContainsBurntMeat;
 
     private void Start()
@@ -76,9 +76,21 @@ public class PlayerOrderInteraction : MonoBehaviour
         if (playerCamera == null)
             playerCamera = Camera.main;
         FindPreparationAnimator();
-        money = startingMoney;
+        economy = PlayerEconomy.Instance;
+        if (economy == null)
+        {
+            economy = gameObject.AddComponent<PlayerEconomy>();
+            economy.InitializeMoney(startingMoney);
+        }
+        economy.Changed += UpdateMoneyText;
         UpdateMoneyText();
         ConfigureCookingStations();
+    }
+
+    private void OnDestroy()
+    {
+        if (economy != null)
+            economy.Changed -= UpdateMoneyText;
     }
 
     private void ConfigureCookingStations()
@@ -202,6 +214,10 @@ public class PlayerOrderInteraction : MonoBehaviour
         if (!pressedInteract && !clicked)
             return;
 
+        // Ưu tiên shop trước nhặt đồ/đặt đồ để cùng một click không bị hành động khác lấy mất.
+        if (clicked && ShopNpc.TryOpenShopAtCamera(playerCamera))
+            return;
+
         if (clicked && !HasFood && string.IsNullOrEmpty(carriedIngredient))
         {
             if (TryPickUpFood() || TryPickUpPlacedIngredient())
@@ -271,9 +287,9 @@ public class PlayerOrderInteraction : MonoBehaviour
 
     public void AddMoney(int amount)
     {
-        money += Mathf.Max(0, amount);
-        UpdateMoneyText();
-        Debug.Log("Tiền hiện có: " + money + "$", this);
+        if (economy == null) economy = PlayerEconomy.Instance;
+        if (economy != null && economy.TryAddMoney(Mathf.Max(0, amount)))
+            Debug.Log("Tiền hiện có: " + economy.Money + "$", this);
     }
 
     public void InteractWithStation(CookingStation station)
@@ -1258,7 +1274,7 @@ public class PlayerOrderInteraction : MonoBehaviour
     private void UpdateMoneyText()
     {
         if (moneyText != null)
-            moneyText.text = money + "$";
+            moneyText.text = Money + "$";
     }
 
     private static GameObject InstantiatePrefab(GameObject prefab)

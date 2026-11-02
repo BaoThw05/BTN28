@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d68a28648519b1468c646ec7ca2e7a4, type: 3}
+  m_Name: tomato
+  m_EditorClassIdentifier: Assembly-CSharp::ShopItem
+  itemId: 46030710440c4aca9046972ea9c1febc
+  itemName: Tomato
+  price: 5
+  icon: {fileID: -194505213, guid: 134752adbfe517346986f67f02df30ee, type: 3}
