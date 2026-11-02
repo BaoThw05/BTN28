@@ -1,11 +1,16 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using System;
 
 /// <summary>Gắn lên NPC bán hàng có Collider. Bấm chuột trái vào NPC để mở shop.</summary>
 [RequireComponent(typeof(Collider))]
 public class ShopNpc : MonoBehaviour
 {
+    private const float MinimumClickDistance = 12f;
+    private const float MaximumRayDistance = 100f;
+    private static int lastHandledClickFrame = -1;
+
     [SerializeField] private ShopUI shopUI;
     [SerializeField] private Camera playerCamera;
     [SerializeField, Min(1f)] private float clickDistance = 10f;
@@ -24,22 +29,45 @@ public class ShopNpc : MonoBehaviour
 
     private void Update()
     {
-        bool pointingAtNpc = IsPointerOverNpc();
+        bool pointingAtNpc = FindAimedShopNpc(ClickCamera) == this;
         SetPromptVisible(pointingAtNpc);
 
         if (pointingAtNpc && Input.GetMouseButtonDown(0))
         {
-            if (UnityEngine.EventSystems.EventSystem.current != null && UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()) return;
-            var ui = shopUI != null ? shopUI : ShopUI.Instance;
-            if (ui != null) ui.Open();
-            else Debug.LogWarning("Chưa có ShopUI trong scene.", this);
+            if (Cursor.lockState != CursorLockMode.Locked &&
+                UnityEngine.EventSystems.EventSystem.current != null &&
+                UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()) return;
+            TryOpenShopAtCamera(ClickCamera);
         }
     }
 
-    private bool IsPointerOverNpc()
+    /// <summary>Được gọi cả từ PlayerOrderInteraction để shop nhận click trước thao tác lấy đồ.</summary>
+    public static bool TryOpenShopAtCamera(Camera cam)
     {
-        Camera cam = ClickCamera;
-        if (cam == null) return false;
+        if (cam == null || !Input.GetMouseButtonDown(0)) return false;
+        if (lastHandledClickFrame == Time.frameCount) return true;
+
+        ShopNpc npc = FindAimedShopNpc(cam);
+        if (npc == null) return false;
+        if (Cursor.lockState != CursorLockMode.Locked &&
+            UnityEngine.EventSystems.EventSystem.current != null &&
+            UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()) return false;
+
+        ShopUI ui = npc.shopUI != null ? npc.shopUI : ShopUI.Instance;
+        if (ui == null)
+        {
+            Debug.LogWarning("Chưa có ShopUI trong scene.", npc);
+            return false;
+        }
+
+        lastHandledClickFrame = Time.frameCount;
+        ui.Open();
+        return true;
+    }
+
+    private static ShopNpc FindAimedShopNpc(Camera cam)
+    {
+        if (cam == null) return null;
 
         // Khi đang chơi góc nhìn thứ ba, cursor thường bị khóa giữa màn hình.
         // Ngắm bằng tâm màn hình giúp không phụ thuộc vị trí cursor ẩn.
@@ -47,11 +75,25 @@ public class ShopNpc : MonoBehaviour
             ? new Vector3(Screen.width * 0.5f, Screen.height * 0.5f, 0f)
             : Input.mousePosition;
         Ray ray = cam.ScreenPointToRay(screenPoint);
-        if (!Physics.Raycast(ray, out RaycastHit hit, clickDistance, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore))
-            return false;
+        RaycastHit[] hits = Physics.RaycastAll(ray, MaximumRayDistance, Physics.AllLayers, QueryTriggerInteraction.Ignore);
+        Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
 
-        // Collider thường nằm ở object con của model NPC, nên tìm ShopNpc ở các parent.
-        return hit.collider.GetComponentInParent<ShopNpc>() == this;
+        foreach (RaycastHit hit in hits)
+        {
+            // Bỏ qua collider nhân vật/camera để không tự chặn raycast.
+            if (hit.collider.transform == cam.transform.root ||
+                hit.collider.transform.IsChildOf(cam.transform.root) ||
+                hit.collider.GetComponentInParent<PlayerMovement>() != null ||
+                hit.collider.GetComponentInParent<PlayerOrderInteraction>() != null)
+                continue;
+
+            // Collider có thể nằm ở object con của model NPC.
+            ShopNpc npc = hit.collider.GetComponentInParent<ShopNpc>();
+            if (npc != null)
+                return hit.distance <= Mathf.Max(MinimumClickDistance, npc.clickDistance) ? npc : null;
+        }
+
+        return null;
     }
 
     private void EnsurePrompt()
@@ -63,14 +105,17 @@ public class ShopNpc : MonoBehaviour
             return;
         }
 
-        var canvasObject = new GameObject("Shop Prompt Canvas", typeof(RectTransform), typeof(Canvas), typeof(CanvasScaler));
-        promptCanvas = canvasObject.GetComponent<Canvas>();
+        if (promptCanvas == null || !promptCanvas.transform.IsChildOf(transform))
+        {
+            var canvasObject = new GameObject("Shop Prompt Canvas", typeof(RectTransform), typeof(Canvas), typeof(CanvasScaler));
+            promptCanvas = canvasObject.GetComponent<Canvas>();
+            promptCanvas.transform.SetParent(transform, false);
+            promptCanvas.transform.localPosition = Vector3.up * promptHeight;
+            promptCanvas.transform.localRotation = Quaternion.identity;
+            promptCanvas.GetComponent<RectTransform>().sizeDelta = new Vector2(320, 60);
+            promptCanvas.GetComponent<CanvasScaler>().dynamicPixelsPerUnit = 10;
+        }
         promptCanvas.renderMode = RenderMode.WorldSpace;
-        promptCanvas.transform.SetParent(transform, false);
-        promptCanvas.transform.localPosition = Vector3.up * promptHeight;
-        promptCanvas.transform.localRotation = Quaternion.identity;
-        promptCanvas.GetComponent<RectTransform>().sizeDelta = new Vector2(320, 60);
-        promptCanvas.GetComponent<CanvasScaler>().dynamicPixelsPerUnit = 10;
 
         var textObject = new GameObject("Prompt Text", typeof(RectTransform), typeof(TextMeshProUGUI));
         textObject.transform.SetParent(promptCanvas.transform, false);

@@ -1,13 +1,27 @@
 using UnityEngine;
 
+/// <summary>Điều khiển hướng mặt trời theo cùng giờ với TimeController.</summary>
 public class DayNightController : MonoBehaviour
 {
-    [SerializeField] private float dayDuration = 30f; // Duration of a full day in seconds
+    [SerializeField] private TimeController timeController;
 
-    // Update is called once per frame
-    void Update()
+    public void SetTimeController(TimeController controller)
     {
-        float rotationSpeed = 360f / dayDuration; // Calculate rotation speed based on day duration
-        transform.Rotate(Vector3.right, rotationSpeed * Time.deltaTime); // Rotate the object around the x-axis
+        timeController = controller;
+    }
+
+    private void Start()
+    {
+        if (timeController == null)
+            timeController = TimeController.Instance;
+    }
+
+    private void Update()
+    {
+        if (timeController == null)
+            timeController = TimeController.Instance;
+        if (timeController == null) return;
+
+        transform.rotation = Quaternion.AngleAxis(timeController.SunRotationAngle, Vector3.right);
     }
 }

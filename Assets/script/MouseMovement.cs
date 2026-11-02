@@ -12,8 +12,8 @@ public class MouseMovement : MonoBehaviour
 
     void Start()
     {
-        //Locking the cursor to the middle of the screen and making it invisible
-        Cursor.lockState = CursorLockMode.Locked;
+        // Tôn trọng trạng thái menu nếu Option/Shop đã mở khi scene khởi động.
+        CursorUIState.Apply();
 
         // The camera is attached to the player model. Hide that model so it does
         // not fill the view or clip into the camera in first-person mode.
@@ -30,6 +30,10 @@ public class MouseMovement : MonoBehaviour
 
     void Update()
     {
+        // Không đọc input chuột khi đang dùng con trỏ để thao tác UI.
+        if (CursorUIState.IsUIOpen || Cursor.lockState != CursorLockMode.Locked)
+            return;
+
         float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
         float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
 

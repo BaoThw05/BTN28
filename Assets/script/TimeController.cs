@@ -1,123 +1,214 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
+/// <summary>Nguồn thời gian duy nhất cho đồng hồ, ánh sáng ngày đêm và skybox.</summary>
 public class TimeController : MonoBehaviour
 {
-    [SerializeField]
-    private float timeMultiplier;
+    public static TimeController Instance { get; private set; }
 
-    [SerializeField]
-    private float startHour;
+    [Header("Thời gian trong game")]
+    [SerializeField, Min(1f)] private float dayDurationSeconds = 300f;
+    [SerializeField, Range(0f, 24f)] private float startHour = 6f;
+    [SerializeField] private TMP_Text timeText;
 
-    [SerializeField]
-    private TextMeshProUGUI timeText;
+    [Header("Mốc bình minh và hoàng hôn")]
+    [SerializeField, Range(0f, 24f)] private float sunriseHour = 6f;
+    [SerializeField, Range(0f, 24f)] private float sunsetHour = 18f;
 
-    [SerializeField]
-    private Light sunLight;
+    [Header("4 Skybox theo thời điểm")]
+    [SerializeField] private Material midnightSkybox;
+    [SerializeField] private Material dawnSkybox;
+    [SerializeField] private Material daySkybox;
+    [SerializeField] private Material sunsetSkybox;
+    [SerializeField, Range(0f, 24f)] private float dawnSkyStartHour = 5f;
+    [SerializeField, Range(0f, 24f)] private float daySkyStartHour = 8f;
+    [SerializeField, Range(0f, 24f)] private float sunsetSkyStartHour = 17f;
+    [SerializeField, Range(0f, 24f)] private float midnightSkyStartHour = 21f;
+    [SerializeField] private Color midnightSkyTint = new Color(.55f, .62f, .85f, 1f);
+    [SerializeField] private Color dawnSkyTint = new Color(1f, .72f, .55f, 1f);
+    [SerializeField] private Color daySkyTint = Color.white;
+    [SerializeField] private Color sunsetSkyTint = new Color(1f, .62f, .42f, 1f);
 
-    [SerializeField]
-    private float sunriseHour;
+    [Header("Ánh sáng")]
+    [SerializeField] private Light sunLight;
+    [SerializeField] private Light moonLight;
+    [SerializeField] private DayNightController dayNightController;
+    [SerializeField] private Color dayAmbientLight = new Color(.65f, .65f, .65f, 1f);
+    [SerializeField] private Color nightAmbientLight = new Color(.08f, .10f, .2f, 1f);
+    [SerializeField, Min(0f)] private float maxSunLightIntensity = 1f;
+    [SerializeField, Min(0f)] private float maxMoonLightIntensity = .2f;
 
-    [SerializeField]
-    private float sunsetHour;
+    public float CurrentHour { get; private set; }
+    public float NormalizedDay => CurrentHour / 24f;
+    public float SunRotationAngle { get; private set; }
 
-    [SerializeField]
-    private Color dayAmbientLight;
+    private Material activeSkyboxAsset;
+    private Material activeSkyboxInstance;
 
-    [SerializeField]
-    private Color nightAmbientLight;
-
-    [SerializeField]
-    private AnimationCurve lightChangeCurve;
-
-    [SerializeField]
-    private float maxSunLightIntensity;
-
-    [SerializeField]
-    private Light moonLight;
-
-    [SerializeField]
-    private float maxMoonLightIntensity;
-
-    private DateTime currentTime;
-
-    private TimeSpan sunriseTime;
-
-    private TimeSpan sunsetTime;
-
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
-        currentTime = DateTime.Now.Date + TimeSpan.FromHours(startHour);
-
-        sunriseTime = TimeSpan.FromHours(sunriseHour);
-        sunsetTime = TimeSpan.FromHours(sunsetHour);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        UpdateTimeOfDay();
-        RotateSun();
-        UpdateLightSettings();
-    }
-
-    private void UpdateTimeOfDay()
-    {
-        currentTime = currentTime.AddSeconds(Time.deltaTime * timeMultiplier);
-
-        if (timeText != null)
+        if (Instance != null && Instance != this)
         {
-            timeText.text = currentTime.ToString("HH:mm");
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+        CurrentHour = Mathf.Repeat(startHour, 24f);
+        FindReferences();
+        ConnectDayNightController();
+    }
+
+    private void OnDestroy()
+    {
+        if (Instance == this) Instance = null;
+        if (activeSkyboxInstance != null)
+        {
+            if (RenderSettings.skybox == activeSkyboxInstance)
+                RenderSettings.skybox = activeSkyboxAsset;
+            Destroy(activeSkyboxInstance);
         }
     }
 
-    private void RotateSun()
+    private void Start()
     {
-        float sunLightRotation;
+        UpdateClockText();
+        UpdateDayNight();
+        UpdateSkybox();
+    }
 
-        if (currentTime.TimeOfDay > sunriseTime && currentTime.TimeOfDay < sunsetTime)
+    private void Update()
+    {
+        if (dayDurationSeconds > 0f)
+            CurrentHour = Mathf.Repeat(CurrentHour + Time.deltaTime * 24f / dayDurationSeconds, 24f);
+
+        UpdateClockText();
+        UpdateDayNight();
+        UpdateSkybox();
+    }
+
+    private void FindReferences()
+    {
+        if (timeText == null)
         {
-            TimeSpan sunriseToSunsetDuration = CalculateTimeDifference(sunriseTime, sunsetTime);
-            TimeSpan timeSinceSunrise = CalculateTimeDifference(sunriseTime, currentTime.TimeOfDay);
+            foreach (TMP_Text text in FindObjectsOfType<TMP_Text>(true))
+                if (string.Equals(text.gameObject.name, "TimeText", System.StringComparison.OrdinalIgnoreCase))
+                {
+                    timeText = text;
+                    break;
+                }
+        }
 
-            double percentage = timeSinceSunrise.TotalMinutes / sunriseToSunsetDuration.TotalMinutes;
+        if (sunLight == null)
+        {
+            foreach (Light lightSource in FindObjectsOfType<Light>())
+                if (lightSource.type == LightType.Directional)
+                {
+                    sunLight = lightSource;
+                    break;
+                }
+        }
+    }
 
-            sunLightRotation = Mathf.Lerp(0, 180, (float)percentage);
+    private void ConnectDayNightController()
+    {
+        if (dayNightController == null && sunLight != null)
+            dayNightController = sunLight.GetComponent<DayNightController>();
+        if (dayNightController == null)
+            dayNightController = FindObjectOfType<DayNightController>();
+        if (dayNightController == null && sunLight != null)
+            dayNightController = sunLight.gameObject.AddComponent<DayNightController>();
+
+        if (dayNightController != null)
+            dayNightController.SetTimeController(this);
+    }
+
+    private void UpdateClockText()
+    {
+        if (timeText == null) return;
+        int totalMinutes = Mathf.FloorToInt(CurrentHour * 60f);
+        int hour = (totalMinutes / 60) % 24;
+        int minute = totalMinutes % 60;
+        timeText.text = hour.ToString("00") + ":" + minute.ToString("00");
+    }
+
+    private void UpdateDayNight()
+    {
+        float dayLength = Mathf.Max(.01f, sunsetHour - sunriseHour);
+        float nightLength = Mathf.Max(.01f, 24f - dayLength);
+        float daylight;
+
+        if (CurrentHour >= sunriseHour && CurrentHour < sunsetHour)
+        {
+            float dayProgress = (CurrentHour - sunriseHour) / dayLength;
+            daylight = Mathf.Sin(dayProgress * Mathf.PI);
+            SunRotationAngle = Mathf.Lerp(0f, 180f, dayProgress);
         }
         else
         {
-            TimeSpan sunsetToSunriseDuration = CalculateTimeDifference(sunsetTime, sunriseTime);
-            TimeSpan timeSinceSunset = CalculateTimeDifference(sunsetTime, currentTime.TimeOfDay);
-
-            double percentage = timeSinceSunset.TotalMinutes / sunsetToSunriseDuration.TotalMinutes;
-
-            sunLightRotation = Mathf.Lerp(180, 360, (float)percentage);
+            float nightProgress = CurrentHour >= sunsetHour
+                ? (CurrentHour - sunsetHour) / nightLength
+                : (CurrentHour + 24f - sunsetHour) / nightLength;
+            daylight = 0f;
+            SunRotationAngle = Mathf.Lerp(180f, 360f, nightProgress);
         }
 
-        sunLight.transform.rotation = Quaternion.AngleAxis(sunLightRotation, Vector3.right);
+        daylight = Mathf.SmoothStep(0f, 1f, Mathf.Clamp01(daylight));
+        if (sunLight != null) sunLight.intensity = maxSunLightIntensity * daylight;
+        if (moonLight != null) moonLight.intensity = maxMoonLightIntensity * (1f - daylight);
+        RenderSettings.ambientLight = Color.Lerp(nightAmbientLight, dayAmbientLight, daylight);
     }
 
-    private void UpdateLightSettings()
+    private void UpdateSkybox()
     {
-        float dotProduct = Vector3.Dot(sunLight.transform.forward, Vector3.down);
-        sunLight.intensity = Mathf.Lerp(0, maxSunLightIntensity, lightChangeCurve.Evaluate(dotProduct));
-        moonLight.intensity = Mathf.Lerp(maxMoonLightIntensity, 0, lightChangeCurve.Evaluate(dotProduct));
-        RenderSettings.ambientLight = Color.Lerp(nightAmbientLight, dayAmbientLight, lightChangeCurve.Evaluate(dotProduct));
-    }
+        Material desiredSkybox;
+        if (CurrentHour >= midnightSkyStartHour || CurrentHour < dawnSkyStartHour)
+            desiredSkybox = midnightSkybox;
+        else if (CurrentHour < daySkyStartHour)
+            desiredSkybox = dawnSkybox;
+        else if (CurrentHour < sunsetSkyStartHour)
+            desiredSkybox = daySkybox;
+        else if (CurrentHour < midnightSkyStartHour)
+            desiredSkybox = sunsetSkybox;
+        else
+            desiredSkybox = midnightSkybox;
 
-    private TimeSpan CalculateTimeDifference(TimeSpan fromTime, TimeSpan toTime)
-    {
-        TimeSpan difference = toTime - fromTime;
-
-        if (difference.TotalSeconds < 0)
+        if (desiredSkybox != null && desiredSkybox != activeSkyboxAsset)
         {
-            difference += TimeSpan.FromHours(24);
+            if (activeSkyboxInstance != null) Destroy(activeSkyboxInstance);
+            activeSkyboxAsset = desiredSkybox;
+            activeSkyboxInstance = new Material(desiredSkybox);
+            RenderSettings.skybox = activeSkyboxInstance;
+            DynamicGI.UpdateEnvironment();
         }
 
-        return difference;
+        // Giữ nguyên asset gốc; chỉ đổi tint trên bản runtime nếu shader có hỗ trợ _Tint.
+        if (activeSkyboxInstance != null && activeSkyboxInstance.HasProperty("_Tint"))
+            activeSkyboxInstance.SetColor("_Tint", EvaluateSkyTint());
+    }
+
+    private Color EvaluateSkyTint()
+    {
+        if (CurrentHour >= midnightSkyStartHour || CurrentHour < dawnSkyStartHour)
+        {
+            float duration = Mathf.Max(.01f, 24f - midnightSkyStartHour + dawnSkyStartHour);
+            float elapsed = CurrentHour >= midnightSkyStartHour
+                ? CurrentHour - midnightSkyStartHour
+                : CurrentHour + 24f - midnightSkyStartHour;
+            return Color.Lerp(midnightSkyTint, dawnSkyTint, Mathf.SmoothStep(0f, 1f, elapsed / duration));
+        }
+        if (CurrentHour < daySkyStartHour)
+        {
+            float t = Mathf.InverseLerp(dawnSkyStartHour, daySkyStartHour, CurrentHour);
+            return Color.Lerp(dawnSkyTint, daySkyTint, Mathf.SmoothStep(0f, 1f, t));
+        }
+        if (CurrentHour < sunsetSkyStartHour)
+        {
+            float t = Mathf.InverseLerp(daySkyStartHour, sunsetSkyStartHour, CurrentHour);
+            return Color.Lerp(daySkyTint, sunsetSkyTint, Mathf.SmoothStep(0f, 1f, t));
+        }
+
+        float sunsetT = Mathf.InverseLerp(sunsetSkyStartHour, midnightSkyStartHour, CurrentHour);
+        return Color.Lerp(sunsetSkyTint, midnightSkyTint, Mathf.SmoothStep(0f, 1f, sunsetT));
     }
 }

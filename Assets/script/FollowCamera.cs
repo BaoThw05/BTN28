@@ -28,8 +28,7 @@ public class FollowCamera : MonoBehaviour
         Vector3 angles = transform.eulerAngles;
         yaw = angles.y;
         pitch = angles.x > 180f ? angles.x - 360f : angles.x;
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        CursorUIState.Apply();
     }
 
     void LateUpdate()
@@ -37,9 +36,12 @@ public class FollowCamera : MonoBehaviour
         if (target == null) return;
 
         // Chỉ xoay camera, tuyệt đối không thay đổi rotation của target/player.
-        yaw += Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
-        pitch -= Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
-        pitch = Mathf.Clamp(pitch, minPitch, maxPitch);
+        if (Cursor.lockState == CursorLockMode.Locked && !CursorUIState.IsUIOpen)
+        {
+            yaw += Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
+            pitch -= Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
+            pitch = Mathf.Clamp(pitch, minPitch, maxPitch);
+        }
         Quaternion cameraRotation = Quaternion.Euler(pitch, yaw, 0f);
 
         // Tự động tìm CharacterController của nhân vật để tính vận tốc di chuyển

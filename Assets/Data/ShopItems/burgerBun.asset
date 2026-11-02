@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d68a28648519b1468c646ec7ca2e7a4, type: 3}
+  m_Name: burgerBun
+  m_EditorClassIdentifier: Assembly-CSharp::ShopItem
+  itemId: 46030710440c4aca9046972ea9c1febc
+  itemName: Burger Bun
+  price: 15
+  icon: {fileID: -245683036, guid: cf42b312dd969ba47b9610d3c1457afa, type: 3}
